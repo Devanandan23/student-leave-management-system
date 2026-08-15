@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Update Profile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #ff6a00, #ee0979);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .form-card {
+      background: #fff;
+      width: 400px;
+      max-width: 95%;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+    .form-card h2 {
+      text-align: center;
+      color: #ff6a00;
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 12px;
+    }
+    label {
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 4px;
+      color: #333;
+    }
+    input, select {
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1.5px solid #ddd;
+      font-size: 13px;
+      outline: none;
+    }
+    input:focus, select:focus {
+      border-color: #ff6a00;
+      box-shadow: 0 0 0 2px rgba(255,106,0,0,0.15);
+    }
+    .submit-btn {
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      color: white;
+      background: linear-gradient(135deg, #ff6a00, #ee0979);
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="form-card">
+  <h2>Update Profile</h2>
+
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- Username -->
+<div class="input-group">
+  <label>Username</label>
+  <input 
+    type="text" 
+    name="username"
+    value="{{ user.username }}"
+    pattern="^[A-Za-z ]+$"
+    title="Username must contain only letters and spaces"
+    required>
+</div>
+
+    <div class="input-group">
+      <label>Student ID</label>
+      <input type="text" name="studentid" value="{{ user.studentid }}" required>
+    </div>
+
+    <div class="input-group">
+      <label>Email</label>
+      <input type="email" name="email" value="{{ user.email }}" readonly>
+    </div>
+
+
+<div class="input-group">
+  <label>Password</label>
+  <input
+    type="password"
+    id="password"
+    name="password"
+    minlength="8"
+    maxlength="13"
+    value="{{user.password}}"
+    required
+  >
+</div>
+
+
+
+    <div class="input-group">
+      <label>Department</label>
+      <select name="department" required>
+        <option selected>{{ user.department }}</option>
+        <option>Fashion Technology</option>
+        <option>Software Development</option>
+        <option>MultiMedia</option>
+        <option>Accounting and taxation</option>
+      </select>
+    </div>
+
+    <div class="input-group">
+      <label>Semester</label>
+      <select name="semester" required>
+        <option selected>{{ user.semester }}</option>
+        <option>1</option><option>2</option><option>3</option>
+        <option>4</option><option>5</option><option>6</option>
+      </select>
+    </div>
+
+
+<div class="input-group">
+  <label>Phone</label>
+  <input
+    type="tel"
+    name="phone"
+    pattern="[0-9]{10}"
+    maxlength="10"
+    placeholder="Enter 10-digit phone number"
+    value="{{ user.phone }}"
+    required
+  >
+</div>
+    <div class="input-group">
+      <label>Update Photo</label>
+      <input type="file" name="image" accept="image/*">
+    </div>
+
+    <button type="submit" class="submit-btn">Update Profile</button>
+  </form>
+</div>
+
+</body>
+</html>

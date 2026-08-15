@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Medical Certificate</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --bg: #f9fafb;
+            --text: #111827;
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 40px 20px; margin: 0; }
+        .card {
+            max-width: 500px; margin: 0 auto; background: #fff;
+            padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+        .btn-back { text-decoration: none; color: var(--primary); font-size: 14px; font-weight: 600; display: block; margin-bottom: 20px; }
+        h2 { margin-top: 0; font-size: 20px; }
+        .leave-info {
+            background: #f3f4f6; padding: 15px; border-radius: 8px; margin-bottom: 25px; font-size: 14px;
+        }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
+        input[type="file"] {
+            width: 100%; padding: 10px; border: 2px dashed #d1d5db; border-radius: 8px; cursor: pointer;
+        }
+        .btn-submit {
+            width: 100%; background: var(--primary); color: white; border: none;
+            padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-submit:hover { background: #4338ca; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <a href="javascript:history.back()" class="btn-back">&larr; Back</a>
+    
+    <h2>Upload Certificate</h2>
+    <p style="color:#666; font-size: 14px;">Attach supporting documents for your leave request.</p>
+
+    <div class="leave-info">
+        <strong>Leave Type:</strong> {{ leave.leave_type }}<br>
+        <strong>Dates:</strong> {{ leave.start_date }} to {{ leave.end_date }}<br>
+        <strong>Reason:</strong> {{ leave.reason|truncatewords:10 }}
+    </div>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="certificate">Select Medical Document (PDF or Image)</label>
+            <input type="file" name="certificate" id="certificate" required>
+        </div>
+        
+        <button type="submit" class="btn-submit">Submit Certificate</button>
+    </form>
+</div>
+
+</body>
+</html>

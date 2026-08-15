@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard - Leave Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --bg: #f0f2f9;
+      --card: #fff;
+      --text: #222;
+      --muted: #666;
+      --accent: #4f46e5;
+      --danger: #dc2626;
+      --radius: 14px;
+      --shadow: 0 6px 20px rgba(0,0,0,0.08);
+    }
+    body { margin:0; font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); }
+
+    /* Navbar */
+    header {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:18px 28px; background:var(--accent); color:#fff; box-shadow:var(--shadow);
+    }
+    header h1 { font-size:22px; margin:0; font-weight:700; }
+    nav { display:flex; gap:12px; }
+
+    /* Button Styling */
+    .btn-nav {
+      position: relative; /* CRITICAL: Anchors the absolute badge to this button */
+      border:none; padding:10px 16px; border-radius:var(--radius);
+      cursor:pointer; font-weight:600; transition:0.2s;
+      display: inline-flex; align-items: center;
+    }
+    .btn-main { background:#4338ca; color:#fff; }
+    .btn-main:hover { background:#312e81; }
+    .btn-logout { background:var(--danger); color:#fff; }
+    .btn-logout:hover { background:#b91c1c; }
+
+    /* Badge Styling */
+    .badge {
+      position: absolute;
+      top: -5px;     /* Adjust to sit slightly above the button */
+      right: -5px;   /* Adjust to sit slightly outside the button */
+      background: #ef4444;
+      color: #fff;
+      border-radius: 50%;
+      width: 20px;   /* Fixed width and height for a perfect circle */
+      height: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--accent); /* Helps it pop against the blue nav */
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    /* Table & Layout */
+    .container { max-width:1100px; margin:40px auto; padding:0 20px; }
+  </style>
+
+</head>
+<body>
+
+  <header>
+    <h1>Fashion Technology</h1>
+    <nav>
+      <button onclick="window.location.href='/userlist_ft/'" class="btn-nav btn-main">User List</button>
+      <button onclick="window.location.href='/medlist_ft/'" class="btn-nav btn-main">Med List</button>
+      <button onclick="window.location.href='/leavelist_ft/'" class="btn-nav btn-main">
+        Leave List
+        {% if count > 0 %}
+          <span class="badge">{{ count }}</span>
+        {% endif %}
+      </button>
+      <button onclick="window.location.href='/adminhome2/'" class="btn-nav btn-main">Back</button>
+      
+    </nav>
+  </header>
+
+  <div class="container">
+    <div style="background:var(--card); padding:24px; border-radius:var(--radius); box-shadow:var(--shadow); max-width:500px; margin:auto;">
+  <h3 style="text-align:center; margin-bottom:20px;">Leave Status Overview</h3>
+  <canvas id="leaveChart"></canvas>
+</div>
+
+      </div>
+<script>
+  const ctx = document.getElementById('leaveChart').getContext('2d');
+
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ['Pending', 'Approved', 'Rejected'],
+      datasets: [{
+        data: [
+          {{ pending }},
+          {{ approved }},
+          {{ rejected }}
+        ],
+        backgroundColor: [
+          '#facc15',  // yellow - pending
+          '#22c55e',  // green - approved
+          '#ef4444'   // red - rejected
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom'
+        }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

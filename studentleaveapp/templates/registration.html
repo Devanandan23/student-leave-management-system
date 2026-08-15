@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Registration</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ===== Compact CSS Styling ===== -->
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #ff6a00, #ee0979);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .form-card {
+      background: #fff;
+      width: 400px;              /* smaller width */
+      max-width: 95%;
+      border-radius: 10px;
+      padding: 20px;             /* reduced padding */
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    .form-card h2 {
+      text-align: center;
+      color: #ff6a00;
+      margin-bottom: 20px;
+      font-size: 20px;           /* smaller heading */
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 12px;       /* tighter spacing */
+    }
+
+    label {
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 4px;
+      color: #333;
+    }
+
+    input, select {
+      padding: 8px 10px;         /* smaller input fields */
+      border-radius: 6px;
+      border: 1.5px solid #ddd;
+      font-size: 13px;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    input:focus, select:focus {
+      border-color: #ff6a00;
+      box-shadow: 0 0 0 2px rgba(255,106,0,0.15);
+    }
+
+    .submit-btn {
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      color: white;
+      background: linear-gradient(135deg, #ff6a00, #ee0979);
+      transition: 0.3s;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+
+<body>
+  <button onclick="history.back()" style="
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  background: white;
+  color: #ff6a00;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+">
+  ⬅ Back
+</button>
+
+
+  <!-- ===== Compact Registration Form ===== -->
+  <div class="form-card">
+    <h2>Student Registration</h2>
+
+    <form method="POST" enctype="multipart/form-data" onsubmit="return validatePasswords()">
+      {% csrf_token %}
+
+      <!-- Username -->
+     <div class="input-group">
+  <label>Username</label>
+  <input 
+    type="text" 
+    name="username"
+    pattern="^[A-Za-z ]*$"
+    title="Username must start with a capital letter and contain only letters"
+    required>
+</div>
+
+      <!-- Student ID -->
+      <div class="input-group">
+        <label>Student ID</label>
+        <input type="text" name="studentid" required>
+      </div>
+
+      <!-- Email -->
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" name="email" required>
+      </div>
+
+      <!-- Password -->
+<div class="input-group">
+  <label>Password</label>
+  <input
+    type="password"
+    id="password"
+    name="password"
+    required
+  >
+  <small id="passwordError" style="color:red;"></small>
+</div>
+
+<script>
+  const passwordInput = document.getElementById("password");
+  const errorText = document.getElementById("passwordError");
+
+  passwordInput.addEventListener("input", function () {
+    const password = passwordInput.value;
+
+    // Regex:
+    // At least 8 characters
+    // At least 1 digit
+    // At least 1 special character
+    const pattern = /^(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+
+    if (!pattern.test(password)) {
+      errorText.textContent =
+        "Password must be at least 8 characters, include 1 number and 1 special character.";
+      passwordInput.style.border = "2px solid red";
+    } else {
+      errorText.textContent = "";
+      passwordInput.style.border = "2px solid green";
+    }
+  });
+</script>
+
+<!-- Confirm Password -->
+<div class="input-group">
+  <label>Confirm Password</label>
+  <input
+    type="password"
+    id="confirm_password"
+    name="confirm_password"
+    minlength="8"
+    maxlength="13"
+    required
+  >
+</div>
+
+      <!-- Department -->
+      <div class="input-group">
+        <label>Department</label>
+        <select name="department" required>
+          <option value="" disabled selected>Select Department</option>
+          <option>Software Development</option>
+          <option>Fashion Technology</option>
+          <option>Multimedia</option>
+          <option>Accounting and taxation</option>
+
+        </select>
+      </div>
+
+      <!-- Semester -->
+      <div class="input-group">
+        <label>Semester</label>
+        <select name="semester" required>
+          <option value="" disabled selected>Select Semester</option>
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+          <option>6</option>
+        </select>
+      </div>
+
+      <!-- Phone -->
+<div class="input-group">
+  <label>Phone</label>
+  <input
+    type="tel"
+    name="phone"
+    pattern="[0-9]{10}"
+    maxlength="10"
+    placeholder="Enter 10-digit phone number"
+    required
+  >
+</div>
+
+      <!-- Upload Photo -->
+      <div class="input-group">
+        <label>Upload Photo</label>
+        <input type="file" name="image" accept="image/*" required>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="submit-btn">Register</button>
+    </form>
+  </div>
+
+  <!-- ===== JavaScript Validation ===== -->
+  <script>
+    function validatePasswords() {
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirm_password").value;
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match. Please try again.");
+        return false; // Prevent form submission
+      }
+      return true; // Allow form submission
+    }
+  </script>
+</body>
+</html>

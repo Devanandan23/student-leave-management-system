@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply Leave</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .back-btn {
+    width: auto;  /* add this line */
+    position: fixed;
+    top: 15px;
+    left: 15px;
+            z-index: 1000;
+            padding: 8px 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            cursor: pointer;
+            background: #fff;
+            color: #0066cc;
+            font-weight: 500;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+            transition: all 0.2s ease;
+        }
+        .back-btn:hover { background: #f5f5f5; transform: scale(1.04); }
+        
+        .container {
+            width: 100%;
+            max-width: 460px;
+            background: white;
+            padding: 32px 28px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+            transition: transform 0.3s ease;
+        }
+        .container:hover { transform: translateY(-4px); }
+        
+        h2 {
+            text-align: center;
+            margin-bottom: 24px;
+            color: #222;
+            font-size: 28px;
+        }
+        label {
+            display: block;
+            margin: 16px 0 6px;
+            font-weight: 600;
+            color: #444;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #3b82f6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
+        textarea { min-height: 90px; resize: vertical; }
+        
+        .note {
+            font-size: 0.92rem;
+            color: #555;
+            margin: 8px 0 16px;
+            padding: 10px;
+            background: #f0f9ff;
+            border-radius: 6px;
+            border-left: 4px solid #3b82f6;
+        }
+        .error {
+            color: #dc2626;
+            background: #fee2e2;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 500;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 24px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        button:hover { background: #1d4ed8; transform: translateY(-1px); }
+
+        @media (max-width: 500px) {
+            .container { padding: 24px 18px; }
+            h2 { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+
+<button type="button" onclick="history.back()" class="back-btn">← Back</button>
+    <div class="container">
+        <h2>Apply for Leave</h2>
+
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <form method="POST" onsubmit="return validateDates()">
+            {% csrf_token %}
+
+            <!-- Hidden or readonly username (more secure from session) -->
+            <input type="hidden" name="username" value="{{ user.username|default:'' }}">
+
+            <label>Leave Type <span style="color:#e11d48;">*</span></label>
+            <select name="leave_type" id="leave_type" required>
+                <option value="" disabled selected>Select type</option>
+                <option value="Personal">Personal</option>
+                <option value="Medical">Medical</option>
+                <option value="Emergency">Emergency</option>
+                <option value="Others">Others</option>
+            </select>
+
+            <div id="emergency-note" class="note" style="display:none;">
+                Emergency leave can be applied for <strong>today</strong> and does <strong>not</strong> count toward your yearly personal leave limit.
+            </div>
+
+            <label>Start Date <span style="color:#e11d48;">*</span></label>
+            <input type="date" id="start_date" name="start_date" required>
+
+            <label>End Date <span style="color:#e11d48;">*</span></label>
+            <input type="date" id="end_date" name="end_date" required>
+
+            <label>Reason <span style="color:#e11d48;">*</span></label>
+            <textarea name="reason" placeholder="Please explain the reason..." required></textarea>
+
+            <button type="submit">Submit Leave Request</button>
+        </form>
+    </div>
+
+    <script>
+        const leaveType = document.getElementById("leave_type");
+        const startInput = document.getElementById("start_date");
+        const endInput = document.getElementById("end_date");
+        const emergencyNote = document.getElementById("emergency-note");
+
+        // Default: tomorrow
+        let minDate = new Date();
+        minDate.setDate(minDate.getDate() + 1);
+        let minDateStr = minDate.toISOString().split("T")[0];
+
+        function updateMinDate(isEmergency) {
+            if (isEmergency) {
+                // Allow today for emergency
+                minDate = new Date();
+                emergencyNote.style.display = "block";
+            } else {
+                minDate = new Date();
+                minDate.setDate(minDate.getDate() + 1);
+                emergencyNote.style.display = "none";
+            }
+            minDateStr = minDate.toISOString().split("T")[0];
+            startInput.min = minDateStr;
+            endInput.min = minDateStr;
+        }
+
+        // Initial setup
+        updateMinDate(false);
+
+        // When leave type changes
+        leaveType.addEventListener("change", () => {
+            const isEmergency = leaveType.value.toLowerCase() === "emergency";
+            updateMinDate(isEmergency);
+        });
+
+        // Keep end date >= start date
+        startInput.addEventListener("change", () => {
+            if (startInput.value) {
+                endInput.min = startInput.value;
+            }
+        });
+
+        function validateDates() {
+            const start = startInput.value;
+            const end = endInput.value;
+            const today = new Date().toISOString().split("T")[0];
+
+            if (!start || !end) {
+                alert("Please select both start and end dates.");
+                return false;
+            }
+
+            if (end < start) {
+                alert("End date cannot be before start date.");
+                return false;
+            }
+
+            const selectedType = leaveType.value.toLowerCase();
+            if (selectedType !== "emergency" && start < today) {
+                alert("Start date must be in the future (except for Emergency leave).");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+
+</body>
+</html>

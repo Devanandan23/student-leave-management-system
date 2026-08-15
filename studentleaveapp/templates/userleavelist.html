@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Leave Applications</title>
+
+    <style>
+        /* Page background */
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: linear-gradient(120deg, #e0eafc, #cfdef3);
+            padding: 40px;
+            color: #2c3e50;
+        }
+
+        /* Back button */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            background: #0078d7;
+            color: #fff;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        .back-btn:hover {
+            background: #005bb5;
+            transform: scale(1.1);
+        }
+
+        /* Heading */
+        h1 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Table container */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        th, td {
+            padding: 16px 20px;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        th {
+            background: #0078d7;
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9fbff;
+        }
+
+        tr:hover {
+            background-color: #eaf3ff;
+            transition: background 0.3s ease;
+        }
+
+        /* Status badges */
+        .status {
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 30px;
+            display: inline-block;
+            font-size: 13px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        }
+
+        .pending {
+            background: #ffcd38;
+            color: #4a3c00;
+        }
+
+        .approved {
+            background: #2ecc71;
+            color: #fff;
+        }
+
+        .rejected {
+            background: #e74c3c;
+            color: #fff;
+        }
+
+        /* Admin remark */
+        .admin-remark {
+            font-style: italic;
+            color: #555;
+        }
+
+        /* Buttons */
+        .btn-reject {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+        .btn-reject:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-submit {
+            margin-left: 8px;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        .btn-submit:hover {
+            background: linear-gradient(135deg, #7b2ff7, #1a73e8);
+            transform: scale(1.05);
+        }
+
+        /* Submitted text */
+        .submitted-text {
+            margin-left: 8px;
+            font-weight: 600;
+            color: #27ae60;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+    <button onclick="history.back()" class="back-btn">⬅ Back</button>
+    <h1>My Leave Applications</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Leave Type</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Admin Remark</th>
+                <th>Medical certificate</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for leave in leaves %}
+            <tr>
+                <td>{{ leave.leave_type }}</td>
+                <td>{{ leave.start_date }}</td>
+                <td>{{ leave.end_date }}</td>
+                <td>{{ leave.reason }}</td>
+                <td>
+                    {% if leave.approved %}
+                        <span class="status approved">Approved</span>
+                    {% elif leave.rejected %}
+                        <span class="status rejected">Rejected</span>
+                    {% else %}
+                        <span class="status pending">Pending</span>
+                    {% endif %}
+                </td>
+                <!-- <form method="POST" action="{% url 'cancel_leave' leave.id %}" 
+          onsubmit="return confirm('Are you sure you want to cancel this leave?');">
+        {% csrf_token %}
+        <button type="submit" class="btn-cancel">Cancel Leave</button>
+    </form> -->
+                <td class="admin-remark">
+                    {% if leave.admin_remark %}
+                        {{ leave.admin_remark }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>
+                  {% if leave.leave_type == "Medical" or leave.leave_type == "Emergency" %}
+                        {% if leave.medsub %}
+                            <span class="submitted-text">Submitted</span>
+                        {% else %}
+                            <a href="{% url 'submitcertificate' leave.id %}" class="btn-submit">
+                                Submit
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7">You have not applied for any leave.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

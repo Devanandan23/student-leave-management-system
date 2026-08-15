@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Student Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #f4f6f9; /* light admin background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ===== LOGIN CARD ===== */
+.login-card {
+  background: #fff;
+  width: 380px;
+  max-width: 95%;
+  border-radius: 6px;
+  padding: 30px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border: 1px solid #e0e0e0;
+}
+
+.login-card h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.input-group {
+  margin-bottom: 16px;
+}
+
+label {
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  display: block;
+  color: #555;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  outline: none;
+  transition: 0.2s;
+}
+
+input:focus {
+  border-color: #0078d7;
+  box-shadow: 0 0 0 2px rgba(0,120,215,0.15);
+}
+
+.login-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  font-size: 15px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  color: white;
+  background: #0078d7; /* admin blue */
+  transition: 0.2s;
+}
+
+.login-btn:hover {
+  background: #005a9e;
+}
+
+.extra-links {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 13px;
+}
+
+.extra-links a {
+  color: #0078d7;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.extra-links a:hover {
+  text-decoration: underline;
+}
+
+/* Forgot password link styling */
+.forgot-link {
+  text-align: right;
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+.forgot-link a {
+  color: #555;
+  text-decoration: none;
+}
+
+.forgot-link a:hover {
+  text-decoration: underline;
+}
+
+/* Back button */
+.back-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 8px 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  background: #fff;
+  color: #0078d7;
+}
+.back-btn:hover {
+  background: #f0f0f0;
+}
+</style>
+</head>
+
+<body>
+<button onclick="history.back()" class="back-btn">⬅ Back</button>
+
+<div class="login-card">
+  <h2>Student Login</h2>
+
+  <form method="POST">
+    {% csrf_token %}
+
+    <div class="input-group">
+      <label>Email</label>
+      <input type="email" name="email" placeholder="Enter your email" required>
+    </div>
+
+    <div class="input-group">
+      <label>Password</label>
+      <input type="password" name="password" placeholder="Enter your password" required>
+    </div>
+
+    <!-- Forgot Password link -->
+    <div class="forgot-link">
+      <a href="/forgot-password/">Forgot Password?</a>
+    </div>
+
+    <button type="submit" class="login-btn">Login</button>
+  </form>
+
+  <div class="extra-links">
+    <p>Don’t have an account?
+      <a href="/registration/">Register</a>
+    </p>
+  </div>
+</div>
+
+</body>
+</html>

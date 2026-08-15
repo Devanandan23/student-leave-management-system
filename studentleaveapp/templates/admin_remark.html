@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Remark</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ACB6E5, #74ebd5);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background: white;
+            padding: 30px 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input, textarea, button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        input[readonly], textarea[readonly] {
+            background-color: #f3f3f3;
+            cursor: not-allowed;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        button {
+            background: #17a2b8;
+            color: white;
+            border: none;
+            margin-top: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #117a8b;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Admin Remark</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Student Username</label>
+        <input type="text" value="{{ leave.student.username }}" readonly>
+
+        <label>Leave Type</label>
+        <input type="text" value="{{ leave.leave_type }}" readonly>
+
+        <label>Start Date</label>
+        <input type="text" value="{{ leave.start_date }}" readonly>
+
+        <label>End Date</label>
+        <input type="text" value="{{ leave.end_date }}" readonly>
+
+        <label>Reason</label>
+        <textarea readonly>{{ leave.reason }}</textarea>
+
+        <label>Admin Remark</label>
+        <textarea name="admin_remark" placeholder="Enter admin remark here..." required>
+{{ leave.admin_remark }}
+        </textarea>
+
+        <button type="submit">Save Remark</button>
+    </form>
+</div>
+
+</body>
+</html>

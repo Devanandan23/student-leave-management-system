@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Profile - Leave Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #f4f6f9;        /* light admin background */
+      --card: #ffffff;      /* white card */
+      --text: #1f2937;      /* dark text */
+      --muted: #6b7280;     /* muted gray */
+      --accent: #2563eb;    /* blue accent */
+      --danger: #dc2626;    /* red for logout */
+      --radius: 10px;
+      --shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    body {
+      margin:0;
+      font-family:'Inter',sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    /* Navbar */
+    header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:18px 32px;
+      background:#1e293b; /* dark navy bar */
+      color:#fff;
+      box-shadow:var(--shadow);
+    }
+    header h1 {
+      font-size:22px;
+      margin:0;
+      font-weight:700;
+      letter-spacing:0.5px;
+      color:var(--accent);
+    }
+    nav {
+      display:flex;
+      gap:12px;
+    }
+    nav button {
+      border:none;
+      padding:8px 16px;
+      border-radius:var(--radius);
+      cursor:pointer;
+      font-weight:600;
+      transition:0.2s;
+      color:#fff;
+    }
+    .btn-home { background:#22c55e; }
+    .btn-home:hover { background:#15803d; }
+    .btn-edit { background:var(--accent); }
+    .btn-edit:hover { background:#1d4ed8; }
+    .btn-logout { background:var(--danger); }
+    .btn-logout:hover { background:#b91c1c; }
+
+    /* Profile card */
+    .container {
+      max-width:850px;
+      margin:50px auto;
+      padding:0 20px;
+    }
+    .profile-card {
+      background:var(--card);
+      padding:28px;
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      border:1px solid #e5e7eb;
+    }
+    .profile-header {
+      display:flex;
+      align-items:center;
+      gap:24px;
+      border-bottom:1px solid #e5e7eb;
+      padding-bottom:20px;
+    }
+    .profile-pic {
+      width:110px;
+      height:110px;
+      border-radius:50%;
+      border:3px solid var(--accent);
+      object-fit:cover;
+      box-shadow:0 0 12px rgba(37,99,235,0.4);
+    }
+    .profile-header h2 {
+      margin:0;
+      font-size:24px;
+      font-weight:700;
+      color:var(--accent);
+    }
+    .profile-body {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:18px;
+      margin-top:24px;
+    }
+    .info {
+      background:#f9fafb;
+      padding:16px;
+      border-radius:var(--radius);
+      border:1px solid #e5e7eb;
+    }
+    .info strong {
+      display:block;
+      font-size:13px;
+      color:var(--accent);
+      margin-bottom:6px;
+      font-weight:600;
+    }
+    .info p {
+      margin:0;
+      font-size:14px;
+      color:var(--text);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header>
+    <h1>Student Profile</h1>
+    <nav>
+      <button onclick="window.location.href='/'" class="btn-home">Home</button>
+      <button onclick="window.location.href='/editprofile/'" class="btn-edit">Edit Profile</button>
+      <button onclick="window.location.href='/logout/'" class="btn-logout">Logout</button>
+      <button onclick="history.back()" class="btn-edit">⬅ Back</button>
+    </nav>
+  </header>
+
+  <!-- Profile content -->
+  <div class="container">
+    <div class="profile-card">
+
+      <!-- Profile header -->
+      <div class="profile-header">
+        {% if user.image %}
+          <img class="profile-pic" src="{{ user.image.url }}" alt="{{ user.username }}">
+        {% else %}
+          <img class="profile-pic" src="https://via.placeholder.com/120" alt="Profile Picture">
+        {% endif %}
+
+        <div>
+          <h2>{{ user.username }}</h2>
+        </div>
+      </div>
+
+      <!-- Profile body -->
+      <div class="profile-body">
+        <div class="info"><strong>Email</strong><p>{{ user.email }}</p></div>
+        <div class="info"><strong>Phone</strong><p>{{ user.phone|default:"-" }}</p></div>
+        <div class="info"><strong>Student ID</strong><p>{{ user.studentid }}</p></div>
+        <div class="info"><strong>Department</strong><p>{{ user.department }}</p></div>
+        <div class="info"><strong>Semester</strong><p>{{ user.semester }}</p></div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Leave Summary</title>
+    <style>
+        body {
+            font-family: Inter, sans-serif;
+            background: #f0f2f9;
+            margin: 0;
+            padding: 40px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: #fff;
+            padding: 22px;
+            border-radius: 14px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        }
+        .card h3 {
+            margin: 0;
+            font-size: 16px;
+            color: #666;
+        }
+        .card p {
+            margin-top: 10px;
+            font-size: 30px;
+            font-weight: 700;
+        }
+        .green { color: #16a34a; }
+        .red { color: #dc2626; }
+        .blue { color: #2563eb; }
+        .orange { color: #ea580c; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>My Leave Summary – {{ year }}</h2>
+
+    <div class="cards">
+        <div class="card">
+            <h3>Total Leaves Taken</h3>
+            <p class="blue">{{ total_taken }} / {{ total_allowed }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Leaves Remaining</h3>
+            <p class="green">{{ remaining }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Medical Leaves</h3>
+            <p class="orange">{{ medical_taken }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Other / Personal Leaves</h3>
+            <p class="red">{{ other_taken }}</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

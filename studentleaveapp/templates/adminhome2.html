@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - Student Leave Management</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body{
+    display:flex;
+    min-height:100vh;
+    background: #f4f6fb;
+    color: #1f2937;
+}
+
+/* ===== Sidebar ===== */
+.sidebar{
+    width:250px;
+    background: #1e40af; 
+    color: #fff;
+    padding: 20px;
+    position: fixed;
+    height: 100%;
+    box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+}
+
+.sidebar h2{
+    text-align:center;
+    margin-bottom:40px;
+    font-size:22px;
+    font-weight:700;
+    letter-spacing:1px;
+}
+
+.sidebar ul{
+    list-style:none;
+}
+
+.sidebar ul li{
+    margin-bottom:20px;
+}
+
+.sidebar ul li a{
+    text-decoration:none;
+    color:#cbd5e1;
+    display:block;
+    padding:10px 15px;
+    border-radius:8px;
+    transition:0.3s;
+}
+
+.sidebar ul li a:hover{
+    background: #2563eb;
+    color:white;
+    padding-left:20px;
+}
+
+/* ===== Main Content ===== */
+.main{
+    margin-left:250px;
+    flex:1;
+    padding:30px;
+}
+
+/* ===== Topbar ===== */
+.topbar{
+    background:white;
+    padding:20px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-radius:10px;
+    margin-bottom:30px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.topbar h2{
+    font-size:20px;
+    font-weight:700;
+}
+
+/* ===== Cards ===== */
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+    gap:25px;
+    margin-bottom:40px;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 4px 20px rgba(0,0,0,0.05);
+    transition:0.3s;
+    position:relative;
+}
+
+.card:hover{
+    transform: translateY(-5px);
+}
+
+.card h3{
+    font-size:14px;
+    color:#4b5563;
+    margin-bottom:10px;
+}
+
+.card p{
+    font-size:24px;
+    font-weight:700;
+    color:#1e40af;
+}
+
+/* ===== Department Sections ===== */
+.department{
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 4px 20px rgba(0,0,0,0.05);
+    margin-bottom:30px;
+}
+
+.department h3{
+    margin-bottom:15px;
+    font-size:18px;
+    color:#1e40af;
+}
+
+/* ===== Professional Note ===== */
+.note{
+    background:#e0e7ff;
+    padding:20px;
+    border-radius:10px;
+    margin-bottom:30px;
+    color:#1e3a8a;
+    font-size:15px;
+    line-height:1.6;
+}
+
+/* ===== Media Queries ===== */
+@media(max-width:768px){
+    .sidebar{ width:180px; }
+    .main{ margin-left:180px; }
+    .cards{ grid-template-columns:1fr; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>Leave Admin</h2>
+    <ul>
+        <li><a href="/leavelist/">Pending leave Requests</a></li>
+        <li><a href="/adminhome_software_dev/">Software Development</a></li>
+        <li><a href="/adminhome_multimedia/">Multimedia</a></li>
+        <li><a href="/adminhome_ft/">Fashion Technology</a></li>
+        <li><a href="/adminhome_at/">Accounting and Taxation</a></li>
+        <li><a href="/">Logout</a></li>
+    </ul>
+</div>
+
+<div class="main">
+
+    <!-- Topbar -->
+    <div class="topbar">
+        <h2>Admin Dashboard</h2>
+        <div>Welcome, Admin</div>
+    </div>
+
+    <!-- Professional Note -->
+    <div class="note">
+       Students List
+    </div>
+
+  <!-- Info Cards -->
+<div class="cards">
+    
+    <div class="card" onclick="window.location.href='/userlist_sd/'" style="cursor:pointer;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+            <span style="font-size:28px;">💻</span>
+            <h3>Software Development</h3>
+        </div>
+        <p>{{ software_dev_count }}</p>
+    </div>
+
+    <div class="card" onclick="window.location.href='/userlist_mm/'" style="cursor:pointer;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+            <span style="font-size:28px;">🎥</span>
+            <h3>Multimedia</h3>
+        </div>
+        <p>{{ multimedia_count }}</p>
+    </div>
+
+    <div class="card" onclick="window.location.href='/userlist_ft/'" style="cursor:pointer;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+            <span style="font-size:28px;">👗</span>
+            <h3>Fashion Technology</h3>
+        </div>
+        <p>{{ ft_count }}</p>
+    </div>
+
+    <div class="card" onclick="window.location.href='/userlist_at/'" style="cursor:pointer;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+            <span style="font-size:28px;">💰</span>
+            <h3>Accounting & Taxation</h3>
+        </div>
+        <p>{{ at_count }}</p>
+    </di
+
+</div>
+
+
+</body>
+</html>

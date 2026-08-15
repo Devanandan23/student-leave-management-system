@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion Technology Leave Applications</title>
+
+    <style>
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: linear-gradient(135deg, #eef2f7, #ffffff);
+            padding: 30px;
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+        th, td {
+            padding: 14px 18px;
+            text-align: center;
+            font-size: 14px;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: linear-gradient(135deg, #007BFF, #005bb5);
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 13px;
+        }
+        tr:nth-child(even) { background-color: #f9fbff; }
+        tr:hover { background-color: #eaf3ff; transition: 0.3s; }
+        .status { font-weight: 600; padding: 8px 16px; border-radius: 30px; display: inline-block; font-size: 12px; }
+        .pending { background: #ffcd38; color: #4a3c00; }
+        .approved { background: #2ecc71; color: #fff; }
+        .rejected { background: #e74c3c; color: #fff; }
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 22px;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: #ffffff;
+            border: none;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Accounting and Taxation Leave Applications</h1>
+
+<a href="{% url 'adminhome_at' %}" class="btn-back">← Back </a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Student</th>
+            <th>Department</th>
+            <th>Leave Type</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Reason</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for leave in leaves %}
+        <tr>
+            <td><strong>{{ leave.student.username }}</strong></td>
+            <td>{{ leave.student.department|default:"Fashion Technology" }}</td>
+            <td>{{ leave.leave_type }}</td>
+            <td>{{ leave.start_date }}</td>
+            <td>{{ leave.end_date }}</td>
+            <td>{{ leave.reason|truncatewords:10 }}</td>
+            <td>
+                {% if leave.approved %}
+                    <span class="status approved">Approved</span>
+                {% elif leave.rejected %}
+                    <span class="status rejected">Rejected</span>
+                {% else %}
+                    <span class="status pending">Pending</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="7">No leave applications found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

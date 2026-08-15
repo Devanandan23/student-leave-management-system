@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student List - Student Leave Management</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+    <style>
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: linear-gradient(135deg, #eef2f7, #ffffff);
+            padding: 30px;
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin-bottom: 40px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 14px 18px;
+            text-align: center;
+            font-size: 14px;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: linear-gradient(135deg, #007BFF, #005bb5);
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 13px;
+        }
+        tr:nth-child(even) { background-color: #f9fbff; }
+        tr:hover { background-color: #eaf3ff; transition: 0.3s; }
+        .profile-pic {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #dee2e6;
+            transition: transform 0.2s ease;
+        }
+        .profile-pic:hover { transform: scale(1.1); }
+        .btn-danger {
+            border-radius: 30px;
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 22px;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: #ffffff;
+            border: none;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Student List</h1>
+
+    <a href="javascript:history.back()" class="btn-back">
+        <i class="bi bi-arrow-left-circle"></i> Back
+    </a>
+
+    <div class="card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Profile</th>
+                    <th>Student ID</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Semester</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>
+                        {% if user.image %}
+                            <img src="{{ user.image.url }}" alt="Profile" class="profile-pic">
+                        {% else %}
+                            <img src="https://via.placeholder.com/55" alt="Profile" class="profile-pic">
+                        {% endif %}
+                    </td>
+                    <td>{{ user.studentid }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.department }}</td>
+                    <td>{{ user.semester }}</td>
+                    <td>
+                        <form method="post" action="{% url 'deleteuser' user.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" 
+                                    class="btn btn-sm btn-danger"
+                                    onclick="return confirm('Are you sure you want to delete {{ user.username }}?');">
+                                <i class="bi bi-trash"></i> Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6">No students found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
